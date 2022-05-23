@@ -1,7 +1,6 @@
 package com.userfront.controller;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.userfront.domain.PrimaryAccount;
+import com.userfront.domain.SavingsAccount;
 import com.userfront.domain.User;
 import com.userfront.service.UserService;
 
@@ -59,5 +60,19 @@ public class HomeController {
 
 
 		}
+	}
+
+
+	@RequestMapping("/userFront")
+	public String userFront(Principal principal, Model model) {
+		User user = userService.findByUsername(principal.getName());
+		PrimaryAccount primaryAccount = user.getPrimaryAccount();
+		SavingsAccount savingsAccount = user.getSavingsAccount();
+
+		model.addAttribute("primaryAccount", primaryAccount);
+		model.addAttribute("savingsAccount", savingsAccount);
+
+		return "userFront";
+
 	}
 }
